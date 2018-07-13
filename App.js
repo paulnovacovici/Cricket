@@ -1,5 +1,5 @@
 import React from 'react';
-import { Keyboard, StyleSheet, Text, View, FlatList, TextInput, Button, TouchableHighlight} from 'react-native';
+import { Keyboard, StyleSheet, Text, View, FlatList, TextInput, Button, TouchableHighlight, TouchableOpacity} from 'react-native';
 import { List, ListItem} from 'react-native-elements';
 import { Ionicons } from '@expo/vector-icons'
 
@@ -9,7 +9,6 @@ export default class App extends React.Component {
 
     this.state = {
       data: [],
-      loading: false,
       inputText: '',
       placeholder: 'Add Team',
     };
@@ -37,8 +36,8 @@ export default class App extends React.Component {
   };
 
   renderFooter = () => {
-    //if (!this.state.loading) return null;
-  
+    if (this.state.data.length >= 4) return null;
+
     return (
       <View style={{flexDirection:'row', flex: 1}}>
         <TextInput
@@ -49,19 +48,18 @@ export default class App extends React.Component {
             clearTextOnFocus={true}
             returnKeyType='go'
         />
-        <TouchableHighlight 
-          underlayColor='gray' 
+        <TouchableHighlight
+          underlayColor='gray'
           onPress={ () => {
             this.state.data.push({name:this.state.inputText})
             this.setState({data:this.state.data, inputText:''}) // Update doesn't render if state is the same D:
-          }
+          } }
         >
           <Ionicons
               style={{marginRight:"5%"}}
               name='ios-add-circle-outline'
               size={50}
-              color='black'
-          />
+              color='black'/>
         </TouchableHighlight>
       </View>
     );
@@ -78,7 +76,22 @@ export default class App extends React.Component {
                   <ListItem
                     title={item.name}
                     titleStyle={styles.itemStyle}
-                    hideChevron
+                    rightIcon={
+                      <View>
+                        <TouchableHighlight
+                          underlayColor='gray'
+                          onPress={ () => {
+
+                          } }
+                        >
+                          <Ionicons
+                              style={{marginRight:"5%"}}
+                              name='ios-close'
+                              size={50}
+                              color='red'/>
+                        </TouchableHighlight>
+                      </View>
+                    }
                     />
                 )}
               extraData = {this.state}
@@ -91,8 +104,8 @@ export default class App extends React.Component {
           </List>
         </View>
         <View>
-          <TouchableHighlight 
-              underlayColor='green' 
+          <TouchableHighlight
+              underlayColor='green'
               onPress={ () => {}}
             >
               <View style={styles.button}>
@@ -114,9 +127,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   header: {
-    flex: 1, 
-    flexDirection: 'row', 
-    justifyContent: 'center', 
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
     backgroundColor: 'black'
   },
   headerText: {
@@ -143,10 +156,10 @@ const styles = StyleSheet.create({
     color: 'white'
   },
   footer: {
-    height: 40, 
-    color: 'black', 
-    marginLeft: '5%', 
-    fontSize: 40, 
-    flex:1, 
+    height: 40,
+    color: 'black',
+    marginLeft: '5%',
+    fontSize: 40,
+    flex:1,
   }
 });
