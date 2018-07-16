@@ -2,6 +2,7 @@ import React from 'react';
 import { Keyboard, StyleSheet, Text, View, FlatList, TextInput, Button, TouchableHighlight, TouchableOpacity} from 'react-native';
 import { List, ListItem} from 'react-native-elements';
 import { Ionicons } from '@expo/vector-icons'
+import Swipeout from 'react-native-swipeout';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -36,7 +37,12 @@ export default class App extends React.Component {
   };
 
   renderFooter = () => {
-    if (this.state.data.length >= 4) return null;
+    if (this.state.data.length >= 4)
+    {
+      return (
+        <Text> Max Teams: 4 </Text>
+      )
+    };
 
     return (
       <View style={{flexDirection:'row', flex: 1}}>
@@ -72,28 +78,28 @@ export default class App extends React.Component {
           <List containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0 }}>
             <FlatList
               data = {this.state.data}
-              renderItem = {({item},index) => (
-                  <ListItem
-                    title={item.name}
-                    titleStyle={styles.itemStyle}
-                    rightIcon={
-                      <View>
-                        <TouchableHighlight
-                          underlayColor='gray'
-                          onPress={ () => {
+              renderItem = {(rowData) => {
+                console.log(rowData)
+                let swipeBtns = [{
+                  text: 'Delete',
+                  type: 'delete',
+                  backgroundColor: 'red',
+                  onPress: () => {
+                    this.state.data.splice(rowData.index,1)
+                    this.setState({data:this.state.data})
+                  }
+                }];
 
-                          } }
-                        >
-                          <Ionicons
-                              style={{marginRight:"5%"}}
-                              name='ios-close'
-                              size={50}
-                              color='red'/>
-                        </TouchableHighlight>
-                      </View>
-                    }
-                    />
-                )}
+                return (
+                  <Swipeout right={swipeBtns}
+                    autoClose={true}
+                    backgroundColor= 'transparent'>
+                    <ListItem
+                      title={rowData.item.name}
+                      titleStyle={styles.itemStyle}
+                      />
+                    </Swipeout>
+                  )}}
               extraData = {this.state}
               ItemSeparatorComponent={this.renderSeparator}
               keyExtractor = {(item, index) => index.toString()}
