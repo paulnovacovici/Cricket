@@ -16,7 +16,14 @@ const RootStack = createStackNavigator({
       header: null
     },
   },
-  Game: GameScreen,
+  Game: {
+    screen: GameScreen,
+    header: {visible: false},
+    navigationOptions: {
+      title: 'Home',
+      header: null
+    },
+  },
 });
 
 export default class App extends React.Component {

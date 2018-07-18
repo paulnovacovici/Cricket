@@ -51,6 +51,10 @@ export default class HomeScreen extends React.Component {
             placeholder={this.state.placeholder}
             value={this.state.inputText}
             onChangeText = {(text) => this.setState({inputText:text})}
+            onSubmitEditing = { () => {
+              this.state.data.push({name:this.state.inputText, score: 0})
+              this.setState({data:this.state.data, inputText:''})
+            }}
             clearTextOnFocus={true}
             returnKeyType='go'
         />
