@@ -12,7 +12,7 @@ export default class GameScreen extends React.Component {
     }
 
     this.props.navigation.getParam('data').map(player =>
-      this.state.scoreboard[player.name] = {20: 0, 19: 0, 18: 0, 17: 0, 16: 0, 15: 0, B: 0}
+      this.state.scoreboard[player.name] = {20: 0, 19: 0, 18: 0, 17: 0, 16: 0, 15: 0, B: 0, score: 0}
     )
   }
 
@@ -56,6 +56,19 @@ export default class GameScreen extends React.Component {
     }
     else {
       // check other players if score is closed or not
+      for (const [key, value] of Object.entries(this.state.scoreboard)) {
+        if (key != name && value[num] != 3) {
+            this.setState(prevState => {
+              if (num == 'B') {
+                prevState.scoreboard[key]["score"] += 25;
+              }
+              else {
+                prevState.scoreboard[key]["score"] += num;
+              }
+              return {scoreboard: prevState.scoreboard}
+            })
+        }
+      }
     }
   }
 
@@ -66,41 +79,41 @@ export default class GameScreen extends React.Component {
 
     buttonsListArr = data.map(player => {
       return (
-      <View key={player.name} style={{flexDirection: 'column', flex: 1}}>
+      <View key={player.name} style={{flexDirection: 'column', flex: 1, backgroundColor: '#d8d8d8'}}>
         <View style={styles.playerContainer} >
           <Text adjustsFontSizeToFit allowFontScaling style={styles.playerText}>{player.name}</Text>
         </View>
-        <TouchableHighlight style={{flex:1}} underlayColor='green' onPress={() => this.scoreboardButton(player.name,20) }>
+        <TouchableHighlight style={{flex:1, justifyContent:'center'}} underlayColor='#dddddd' onPress={() => this.scoreboardButton(player.name,20) }>
             <View style={styles.gameboardButton}>
               <Text style={this.textColor(this.state.scoreboard[player.name][20])}>20</Text>
             </View>
         </TouchableHighlight>
-        <TouchableHighlight style={{flex:1}} underlayColor='green' onPress={ () => this.scoreboardButton(player.name,19) }>
+        <TouchableHighlight style={{flex:1, justifyContent:'center'}} underlayColor='#dddddd' onPress={ () => this.scoreboardButton(player.name,19) }>
             <View style={styles.gameboardButton}>
               <Text style={this.textColor(this.state.scoreboard[player.name][19])}>19</Text>
             </View>
         </TouchableHighlight>
-        <TouchableHighlight style={{flex:1}} underlayColor='green' onPress={ () => this.scoreboardButton(player.name,18) }>
+        <TouchableHighlight style={{flex:1, justifyContent:'center'}} underlayColor='#dddddd' onPress={ () => this.scoreboardButton(player.name,18) }>
             <View style={styles.gameboardButton}>
               <Text style={this.textColor(this.state.scoreboard[player.name][18])}>18</Text>
             </View>
         </TouchableHighlight>
-        <TouchableHighlight style={{flex:1}} underlayColor='green' onPress={ () => this.scoreboardButton(player.name,17) }>
+        <TouchableHighlight style={{flex:1, justifyContent:'center'}} underlayColor='#dddddd' onPress={ () => this.scoreboardButton(player.name,17) }>
             <View style={styles.gameboardButton}>
               <Text style={this.textColor(this.state.scoreboard[player.name][17])}>17</Text>
             </View>
         </TouchableHighlight>
-        <TouchableHighlight style={{flex:1}} underlayColor='green' onPress={ () => this.scoreboardButton(player.name,16) }>
+        <TouchableHighlight style={{flex:1, justifyContent:'center'}} underlayColor='#dddddd' onPress={ () => this.scoreboardButton(player.name,16) }>
             <View style={styles.gameboardButton}>
               <Text style={this.textColor(this.state.scoreboard[player.name][16])}>16</Text>
             </View>
         </TouchableHighlight>
-        <TouchableHighlight style={{flex:1}} underlayColor='green' onPress={ () => this.scoreboardButton(player.name,15) }>
+        <TouchableHighlight style={{flex:1, justifyContent:'center'}} underlayColor='#dddddd' onPress={ () => this.scoreboardButton(player.name,15) }>
             <View style={styles.gameboardButton}>
               <Text style={this.textColor(this.state.scoreboard[player.name][15])}>15</Text>
             </View>
         </TouchableHighlight>
-        <TouchableHighlight style={{flex:1}} underlayColor='green' onPress={ () => this.scoreboardButton(player.name,"B") }>
+        <TouchableHighlight style={{flex:1, justifyContent:'center'}} underlayColor='#dddddd' onPress={ () => this.scoreboardButton(player.name,"B") }>
             <View style={styles.gameboardButton}>
               <Text style={this.textColor(this.state.scoreboard[player.name]["B"])}>B</Text>
             </View>
@@ -109,12 +122,12 @@ export default class GameScreen extends React.Component {
           style={{
             height: 1,
             width: "100%",
-            backgroundColor: "#CED0CE",
+            backgroundColor: "black",
             marginLeft: "14%"
           }}
         />
         <View style={styles.scoreboard}>
-          <Text> {player.score} </Text>
+          <Text> {this.state.scoreboard[player.name]["score"]} </Text>
         </View>
       </View>
 
