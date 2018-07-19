@@ -5,6 +5,7 @@ import { Text, View, StyleSheet, TouchableHighlight} from 'react-native';
 
 export default class GameScreen extends React.Component {
   constructor(props) {
+
     super(props);
 
     this.state = {
@@ -14,6 +15,8 @@ export default class GameScreen extends React.Component {
     this.props.navigation.getParam('data').map(player =>
       this.state.scoreboard[player.name] = {20: 0, 19: 0, 18: 0, 17: 0, 16: 0, 15: 0, B: 0, score: 0}
     )
+
+    this.history = [JSON.parse(JSON.stringify( this.state.scoreboard ))]
   }
 
   textColor = (clicks) => {
@@ -47,10 +50,21 @@ export default class GameScreen extends React.Component {
     }
   }
 
+  undoFunction = () => {
+    console.log(this.history);
+    if (this.history.length > 1){
+      this.setState(prevState => {
+        this.history.pop()
+        return {scoreboard: JSON.parse(JSON.stringify(this.history[this.history.length-1]))}
+      })
+    }
+  }
+
   scoreboardButton = (name, num) => {
     if (this.state.scoreboard[name][num] < 3) {
       this.setState(prevState => {
         prevState.scoreboard[name][num]++;
+        this.history.push(JSON.parse(JSON.stringify(prevState.scoreboard)));
         return {scoreboard: prevState.scoreboard}
       })
     }
@@ -65,6 +79,7 @@ export default class GameScreen extends React.Component {
               else {
                 prevState.scoreboard[key]["score"] += num;
               }
+              this.history.push(JSON.parse(JSON.stringify(prevState.scoreboard)));
               return {scoreboard: prevState.scoreboard}
             })
         }
@@ -140,12 +155,44 @@ export default class GameScreen extends React.Component {
         <View style={{ flexDirection: 'row', flex: 1}}>
           {buttonsListArr}
         </View>
+        <View style={{flexDirection: 'row'}}>
+          <TouchableHighlight style={{flex:1}} underLayColor='green' onPress={() => {this.undoFunction()}}>
+            <View style={styles.undoButton}>
+              <Text style={styles.undoText}> Undo </Text>
+            </View>
+          </TouchableHighlight>
+          <TouchableHighlight style={{flex:1}} underLayColor='green' onPress={() => {this.props.navigation.navigate('Home')}}>
+            <View style={styles.newGameButton}>
+              <Text style={styles.newGameText}> New Game </Text>
+            </View>
+          </TouchableHighlight>
+        </View>
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  undoButton: {
+    alignItems: 'center',
+    backgroundColor: 'indianred'
+  },
+  undoText: {
+    padding: 15,
+    fontSize: 25,
+    fontWeight: 'bold',
+    color: 'white'
+  },
+  newGameButton: {
+    alignItems: 'center',
+    backgroundColor: '#2196F3'
+  },
+  newGameText: {
+    padding: 15,
+    fontSize: 25,
+    fontWeight: 'bold',
+    color: 'white'
+  },
   playerContainer: {
     height: 70,
     alignItems: 'center',
