@@ -6,7 +6,7 @@ import {View, Text, StyleSheet, Platform} from 'react-native';
 export default class StatusBarBackground extends Component{
   render(){
     return(
-      <View style={[styles.statusBarBackground, this.props.style || {}]}> //This part is just so you can change the color of the status bar from the parents by passing it as a prop
+      <View style={[styles.statusBarBackground, this.props.style || {}]}> 
       </View>
     );
   }

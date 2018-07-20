@@ -51,7 +51,6 @@ export default class GameScreen extends React.Component {
   }
 
   undoFunction = () => {
-    console.log(this.history);
     if (this.history.length > 1){
       this.setState(prevState => {
         this.history.pop()
@@ -70,20 +69,20 @@ export default class GameScreen extends React.Component {
     }
     else {
       // check other players if score is closed or not
-      for (const [key, value] of Object.entries(this.state.scoreboard)) {
-        if (key != name && value[num] != 3) {
-            this.setState(prevState => {
-              if (num == 'B') {
-                prevState.scoreboard[key]["score"] += 25;
-              }
-              else {
-                prevState.scoreboard[key]["score"] += num;
-              }
-              this.history.push(JSON.parse(JSON.stringify(prevState.scoreboard)));
-              return {scoreboard: prevState.scoreboard}
-            })
+      this.setState(prevState => {
+        for (const [key, value] of Object.entries(this.state.scoreboard)) {
+          if (key != name && value[num] != 3) {
+                if (num == 'B') {
+                  prevState.scoreboard[key]["score"] += 25;
+                }
+                else {
+                  prevState.scoreboard[key]["score"] += num;
+                }
+          }
         }
-      }
+        this.history.push(JSON.parse(JSON.stringify(prevState.scoreboard)));
+        return {scoreboard: prevState.scoreboard}
+      })
     }
   }
 
